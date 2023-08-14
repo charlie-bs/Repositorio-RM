@@ -1,14 +1,28 @@
-float x = -25;
+float x = 100;
 float y = 500;
+
 float yg = 500;
+
 float h = 300;
 float d = 200;
+
 float startTime = 0;
+
 float vel = 150;
+
 boolean isJumping = false;
+boolean platTrue = false;
+
 float sx = 0;
 float dy = 0;
 int dir = 1;
+
+float px1 = 400;
+float px2 = 656;
+float py = 275;
+
+float r = 25;
+float dc = 2*r;
 
 void setup() {
   size(1024, 768);
@@ -26,21 +40,69 @@ void draw() {
 void update(float elapsedTime) {
   float dx = vel * elapsedTime;
   x += dir * dx;
-  if (isJumping) {
+  
+  if (isJumping & !platTrue) {
     sx += dx;
     dy = calcDY(sx);
+    
     if (sx > d/2){
       isJumping = false;
       dy = 0;
     }
+    
+    else if ((x > px1 && x < px2) && (y - dy > py) && (sx > 0)) {
+      isJumping = false;
+      dy = py - dc;
+      platTrue = true;
+      
+      if (sx > d/2){
+        isJumping = false;
+        platTrue = false;
+        dy = 0;
+      }
+      
+    }
+    
   }
-  if (x > 999) dir = -1;
-  if (x < 25) dir = 1;
+  
+  if (isJumping & platTrue) {
+    sx += dx;
+    dy = calcDY(sx) + py - dc;
+    
+    if (sx > d/2 + 35){
+      isJumping = false;
+      platTrue = false;
+      dy = 0;
+    }
+    
+    else if ((x > px1 && x < px2) && (y - dy > py) && (sx > 0)) {
+      isJumping = false;
+      dy = py - dc;
+      platTrue = true;
+      
+      if (sx > d/2 + 35){
+        isJumping = false;
+        platTrue = false;
+        dy = 0;
+      }
+    }
+  }
+  
+  if ((platTrue) && (x < px1 || x > px2)) {
+    isJumping = false;
+    platTrue = false;
+    sx += dx;
+    dy = 0;
+  }
+  
+    
+  if (x > 999 || x < r) dir = -dir;
 }
 
 void render() {
   circle(x, y - dy, 50);
   rect(0, yg + 25, width, 500);
+  rect(400, 300, 256, 25);
 }
 
 float calcDY(float dx) {

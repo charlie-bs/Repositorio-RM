@@ -1,0 +1,54 @@
+float x = 25;
+float y = 500;
+float yg = 500;
+float h = 300;
+float d = 200;
+float startTime = 0;
+float vel = 150;
+boolean isJumping = false;
+float sx = 0;
+float dy = 0;
+int dir = 1;
+
+void setup() {
+  size(1024, 768);
+  startTime = millis();
+}
+
+void draw() {
+  float elapsedTime = (millis() - startTime) / 1000.0f;
+  startTime = millis();
+  background(0);
+  update(elapsedTime);
+  render();
+}
+
+void update(float elapsedTime) {
+  float dx = dir * vel * elapsedTime;
+  x += dx;
+  if (isJumping) {
+    sx += dx;
+    dy = calcDY(sx);
+    if (sx > d/2 || sx < -d/2){
+      isJumping = false;
+      dy = 0;
+    }
+  }
+  if (x > 999 || x < 25) dir = -dir;
+}
+
+void render() {
+  circle(x, y - dy, 50);
+  rect(0, yg + 25, width, 10);
+}
+
+float calcDY(float sx) {
+  return -4*h*pow(sx, 2)/pow(d, 2) + h;
+}
+
+void mousePressed() {
+  if (!isJumping) {
+    isJumping = true;
+    sx = dir * -d/2;
+  }
+}
