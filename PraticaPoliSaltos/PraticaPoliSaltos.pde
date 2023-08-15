@@ -5,7 +5,7 @@ float yg = 500;
 
 float h = 300;
 float d = 200;
-float hd = 150;
+float hs = 225;
 
 float startTime = 0;
 
@@ -42,6 +42,7 @@ void update(float elapsedTime) {
   float dx = vel * elapsedTime;
   x += dir * dx;
   
+  // pulando fora da plataforma
   if (isJumping & !platTrue) {
     sx += dx;
     dy = calcDY(sx);
@@ -51,11 +52,13 @@ void update(float elapsedTime) {
       dy = 0;
     }
     
+    // se tocar na plataforma, fique no ar
     else if ((x > px1 && x < px2) && (y - dy > py) && (sx > 0)) {
       isJumping = false;
       dy = py - dc;
       platTrue = true;
       
+      // se cair no chao, resete tudo
       if (sx > d/2){
         isJumping = false;
         platTrue = false;
@@ -66,21 +69,25 @@ void update(float elapsedTime) {
     
   }
   
+  // pula pra fora da plataforma
   if (isJumping & platTrue) {
     sx += dx;
     dy = calcDY(sx) + py - dc;
     
-    if (sx > d/2 + 35){
+    // se cair depois de pular da plataforma, resetar ok
+    if (sx > d/2 && y - dy > 500){
       isJumping = false;
       platTrue = false;
       dy = 0;
     }
     
+    // pulin
     else if ((x > px1 && x < px2) && (y - dy > py) && (sx > 0)) {
       isJumping = false;
       dy = py - dc;
       platTrue = true;
       
+      // reset maroto
       if (sx > d/2 && y - dy > 500){
         isJumping = false;
         platTrue = false;
@@ -89,11 +96,13 @@ void update(float elapsedTime) {
     }
   }
   
-  if ((platTrue) && (x < px1 || x > px2) && !isJumping) {
-    isJumping = false;
+  // se cair da plataforma, desce a gravidade
+  if ((platTrue) && (x < px1 - r || x > px2 + r) && !isJumping) {
+    isJumping = true;
     platTrue = false;
-    sx += dx;
     dy = calcDY(sx);
+    sx += 0;
+    // reseta tudo logo
       if (sx > d/2 && y - dy > 500){
         isJumping = false;
         platTrue = false;
@@ -111,6 +120,10 @@ void render() {
 
 float calcDY(float dx) {
   return -4*h*pow(dx, 2)/pow(d, 2) + h;
+}
+
+float calcFall(float dx) {
+  return -4*hs*pow(dx, 2)/pow(d, 2) + hs;
 }
 
 void mousePressed() {
