@@ -92,10 +92,14 @@ void update(float elapsedTime) {
   if ((platTrue) && (x < px1 || x > px2) && !isJumping) {
     isJumping = false;
     platTrue = false;
-    sx = -d/2;
+    sx += dx;
+    dy = calcDY(sx);
+      if (sx > d/2 && y - dy > 500){
+        isJumping = false;
+        platTrue = false;
+        dy = 0;
+    }
   }
-  
-    
   if (x > 999 || x < r) dir = -dir;
 }
 
