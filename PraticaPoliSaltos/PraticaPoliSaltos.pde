@@ -5,6 +5,7 @@ float yg = 500;
 
 float h = 300;
 float d = 200;
+float hd = 150;
 
 float startTime = 0;
 
@@ -80,7 +81,7 @@ void update(float elapsedTime) {
       dy = py - dc;
       platTrue = true;
       
-      if (sx > d/2 + 35){
+      if (sx > d/2 && y - dy > 500){
         isJumping = false;
         platTrue = false;
         dy = 0;
@@ -88,11 +89,10 @@ void update(float elapsedTime) {
     }
   }
   
-  if ((platTrue) && (x < px1 || x > px2)) {
+  if ((platTrue) && (x < px1 || x > px2) && !isJumping) {
     isJumping = false;
     platTrue = false;
-    sx += dx;
-    dy = 0;
+    sx = -d/2;
   }
   
     
