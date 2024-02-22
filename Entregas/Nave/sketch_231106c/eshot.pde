@@ -1,16 +1,28 @@
-class Shot {
+class EShot {
   
   private PVector pos;
   private PVector dir;
-  private float vel = 350;
+  private float vel = 1000;
+  float x;
+  float y;
   
-  Shot(float x, float y, PVector dir) {
+  EShot(float x, float y, PVector dir) {
     pos = new PVector(x, y);
     this.dir = dir;
   }
   
   void update(float elapsedTime) {
     pos.add(PVector.mult(dir, vel * elapsedTime));
+    float d = dist(pos.x, pos.y, player.x, player.y);
+    
+    if (d < 40 && player.inv == false) {
+      player.hp -= 1;
+      player.inv = true;
+      if (player.hp == 0) {
+        gameOver = true;
+        gameStart = false;
+      }
+    }
   }
   
   void render() {
