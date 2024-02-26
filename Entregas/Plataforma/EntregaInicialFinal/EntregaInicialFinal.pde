@@ -138,7 +138,8 @@ void render() {
     textSize(64);
     text("bolinha aventuras", 40, 120);
     text("por breno bastos gallina", 40, 180); 
-    text("s pula / a para mudar a direção", 40, 240); 
+    text("s pula / a para mudar a direção", 40, 240);
+    text("enter para começar", 40, 300);
     }
     
     // tela final, um else dentro de um else. eila iá...
